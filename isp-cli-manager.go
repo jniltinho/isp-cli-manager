@@ -8,14 +8,16 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/jniltinho/easyssh"
 )
 
+
 const (
 	VERSION    = "0.4"
-	BUILD_DATE = "20160113"
+	BUILD_DATE = "20171009"
 	SOURCE     = "https://gist.github.com/jniltinho/347a1c32f9781808c81b"
 )
 
@@ -40,6 +42,18 @@ var (
 	mk_cmd    string = "export compact"
 	mk_time   string = time.Now().Format("20060102_1504")
 )
+
+
+// Use: err, out, errout := cli_linux("ls -ltr")
+func cli_linux(command string) (error, string, string) {
+    var stdout bytes.Buffer
+    var stderr bytes.Buffer
+    cmd := exec.Command("/bin/bash", "-c", command)
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    return err, stdout.String(), stderr.String()
+}
 
 func mk_backup() {
 
